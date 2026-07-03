@@ -1,0 +1,22 @@
+HTTP/1.1 200 200
+Date: Fri, 03 Jul 2026 04:53:35 GMT
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=0
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Pragma: no-cache
+Expires: Wed, 31 Dec 1969 23:59:59 GMT
+Cache-Control: max-age=63072000, no-cache, no-store, must-revalidate
+Content-Language: en-IN
+Set-Cookie: JSESSIONID=BB352B2B7D98C473A84178633FFD74CC; Path=/PanPSACenters; Secure; HttpOnly;HttpOnly;Secure;SameSite=Strict;key=value
+Content-Security-Policy: default-src ‘self’;
+Clear-Site-Data: *
+Content-Type: text/html;charset=ISO-8859-1
+Set-Cookie: TS0131a359=013304950d0883aa9421440859582c44bc54e26199513ee262a333072b2a52fc170d2bca17756079c2b355beb833c749af120b0694; Path=/; Domain=.psaonline.utiitsl.com
+Set-Cookie: TS01940682=013304950dc543cb76d36957003d3ebbf609a2f46f513ee262a333072b2a52fc170d2bca1753903c64945a378193af6ed618c4b2f71d2a6f1eb5a97d1b07eb1373f5156294; path=/PanPSACenters
+Transfer-Encoding: chunked
+

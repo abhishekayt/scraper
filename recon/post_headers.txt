@@ -1,0 +1,17 @@
+HTTP/1.1 404 404
+Date: Fri, 03 Jul 2026 04:54:19 GMT
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=0
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Pragma: no-cache
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Cache-Control: max-age=63072000, no-cache, no-store, must-revalidate
+Content-Length: 0
+Content-Security-Policy: default-src ‘self’;
+Clear-Site-Data: *
+
