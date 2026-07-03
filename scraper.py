@@ -24,6 +24,8 @@ automatically retries that district (fresh page, fresh CAPTCHA, up to
 --max-attempts times) before giving up and moving on.
 """
 
+from __future__ import annotations  # keeps `list[str]` hints working on Python < 3.9
+
 import argparse
 import csv
 import json

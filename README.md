@@ -43,6 +43,13 @@ Progress is saved after every single district, so stopping partway through
 
 ## Setup
 
+**On a fresh machine (Python already installed, nothing else):** copy this
+whole folder over and double-click `setup.bat`. It installs the pip
+packages and the Chromium browser Playwright needs, and tells you when it's
+done. No manual steps.
+
+**Manual equivalent:**
+
 ```bash
 pip install -r requirements.txt
 playwright install chromium
