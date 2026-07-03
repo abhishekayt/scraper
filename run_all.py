@@ -23,7 +23,7 @@ import json
 import time
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Error as PlaywrightError
 
 import scraper as S
 import merge_and_track as MT
@@ -70,6 +70,8 @@ def main():
         print("Nothing to do.")
         return
 
+    stopped_early = False
+
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         context = browser.new_context()
@@ -80,8 +82,14 @@ def main():
             state_id = S.STATE_IDS[state_name]
             print(f"\n[{i}/{len(remaining)}] {state_name} / {district}")
 
-            rows = S.scrape_one_district(page, state_id, state_name, district,
-                                          args.max_attempts, args.timeout_minutes)
+            try:
+                rows = S.scrape_one_district(page, state_id, state_name, district,
+                                              args.max_attempts, args.timeout_minutes)
+            except PlaywrightError as e:
+                print(f"\nBrowser window was closed or crashed mid-run ({e}). "
+                      f"Stopping here — everything completed so far is already saved.")
+                stopped_early = True
+                break
 
             if rows is None:
                 # Bad dropdown match — still record it as "attempted" so it doesn't
@@ -97,9 +105,16 @@ def main():
 
             time.sleep(1)  # be polite between requests
 
-        browser.close()
+        try:
+            browser.close()
+        except PlaywrightError:
+            pass
 
-    print(f"\nRun finished. output/ now has {len(records)} total records.")
+    if stopped_early:
+        print(f"\nStopped early. output/ now has {len(records)} total records. "
+              f"Just re-run `python run_all.py` to continue from where this left off.")
+    else:
+        print(f"\nRun finished. output/ now has {len(records)} total records.")
 
 
 if __name__ == "__main__":

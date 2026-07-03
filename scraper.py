@@ -34,7 +34,11 @@ import time
 from pathlib import Path
 
 from bs4 import BeautifulSoup
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import (
+    sync_playwright,
+    TimeoutError as PlaywrightTimeoutError,
+    Error as PlaywrightError,
+)
 
 BASE_URL = "https://psaonline.utiitsl.com/PanPSACenters/forms/applicationCenters"
 
@@ -258,14 +262,22 @@ def run(state_name: str, districts: list[str], out_dir: Path, headless: bool,
 
         for i, district in enumerate(districts, 1):
             print(f"\n[{i}/{len(districts)}] District: {district}")
-            rows = scrape_one_district(page, state_id, state_name.upper(), district,
-                                        max_attempts, timeout_minutes)
+            try:
+                rows = scrape_one_district(page, state_id, state_name.upper(), district,
+                                            max_attempts, timeout_minutes)
+            except PlaywrightError as e:
+                print(f"\nBrowser window was closed or crashed mid-run ({e}). "
+                      f"Stopping here — everything completed so far is already saved.")
+                break
             if rows:
                 records.extend(rows)
                 write_outputs(records, out_dir)  # incremental save after each district
             time.sleep(1)  # be polite between requests
 
-        browser.close()
+        try:
+            browser.close()
+        except PlaywrightError:
+            pass
 
     write_outputs(records, out_dir)
     print(f"\nDone. {len(records)} total record(s) collected across "
