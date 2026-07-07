@@ -127,6 +127,16 @@ def page_has_results_table(html):
     return soup.find("table") is not None
 
 
+def page_has_no_record_message(html):
+    """A district with zero matching centers renders "No Record Found......!"
+    instead of a results table — this is a VALID successful search (correct
+    CAPTCHA, correct district, just no data), not a rejected CAPTCHA. Without
+    this check, scrape_one_district would burn all its retries and get stuck
+    treating a genuinely-empty district as a CAPTCHA failure."""
+    soup = BeautifulSoup(html, "html.parser")
+    return "no record found" in soup.get_text(" ", strip=True).lower()
+
+
 def write_outputs(records, out_dir: Path):
     out_dir.mkdir(parents=True, exist_ok=True)
     if not records:
@@ -202,6 +212,10 @@ def scrape_one_district(page, state_id, state_name, district, max_attempts, time
         html = page.content()
 
         if not page_has_results_table(html):
+            if page_has_no_record_message(html):
+                print(f"  '{district}' has no matching centers "
+                      f"(valid search, genuinely zero results).")
+                return []
             print("  No results table found — CAPTCHA was likely rejected. Retrying "
                   "this district with a fresh CAPTCHA." if attempt < max_attempts
                   else "  No results table again — giving up on this district.")
